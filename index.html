@@ -1008,16 +1008,33 @@
           if (gameState.blackTime === 0) {
             gameState.winner = 'white';
             playWinSound();
+            render();
+            return;
           }
         } else {
           gameState.whiteTime = Math.max(0, gameState.whiteTime - 1);
           if (gameState.whiteTime === 0) {
             gameState.winner = 'black';
             playWinSound();
+            render();
+            return;
           }
         }
-        render();
+        // 只更新計時器顯示，不重新渲染整個頁面
+        updateTimerDisplay();
       }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const blackTimerEl = document.querySelector('.timer.black-timer .timer-value');
+      const whiteTimerEl = document.querySelector('.timer.white-timer .timer-value');
+
+      if (blackTimerEl) {
+        blackTimerEl.textContent = formatTime(gameState.blackTime);
+      }
+      if (whiteTimerEl) {
+        whiteTimerEl.textContent = formatTime(gameState.whiteTime);
+      }
     }
 
     function handleCellClick(row, col) {
@@ -1275,14 +1292,14 @@
           </div>
 
           <div class="timer-section">
-            <div class="timer">
+            <div class="timer black-timer">
               <div class="timer-label">
                 <div class="timer-piece black"></div>
                 黑子
               </div>
               <div class="timer-value">${formatTime(gameState.blackTime)}</div>
             </div>
-            <div class="timer">
+            <div class="timer white-timer">
               <div class="timer-label">
                 <div class="timer-piece white"></div>
                 白子
